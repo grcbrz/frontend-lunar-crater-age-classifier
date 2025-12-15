@@ -144,7 +144,7 @@ def render_sidebar_navigation():
                             display: flex; align-items: center; justify-content: center;">
                     <span style="font-size: 2rem;">🌙</span>
                 </div>
-                <h2 style="margin-top: 1rem; color: white; font-size: 1.5rem;">LunarChron</h2>
+                <h2 style="margin-top: 1rem; color: white; font-size: 1.5rem;">LunarAlge</h2>
             </div>
         """, unsafe_allow_html=True)
 
@@ -170,7 +170,7 @@ def render_header():
                 <span style="font-size: 1.25rem;">🌙</span>
             </div>
             <span style="font-weight: 700; font-size: 1.25rem; color: white;">
-                LunarChron
+                LunarAlge
             </span>
         </div>
     """, unsafe_allow_html=True)
@@ -184,7 +184,7 @@ def render_footer():
         </div>
     """, unsafe_allow_html=True)
 
-def setup_page_config(page_title="LunarChron Classifier", page_icon="🌙"):
+def setup_page_config(page_title="LunarCrater Classifier", page_icon="🌙"):
     """Setup common page configuration"""
     st.set_page_config(
         page_title=page_title,
@@ -192,11 +192,11 @@ def setup_page_config(page_title="LunarChron Classifier", page_icon="🌙"):
         layout="wide",
         initial_sidebar_state="expanded",
         menu_items={
-            'About': "LunarAge Classifier - AI-powered lunar crater age prediction"
+            'About': "LunarCrater Classifier - AI-powered lunar crater age prediction"
         }
     )
 
-def init_layout(page_title="LunarChronX Classifier", page_icon="🌙", show_sidebar=True):
+def init_layout(page_title="LunarCreater Classifier", page_icon="🌙", show_sidebar=True):
     """Initialize the complete layout for a page"""
     setup_page_config(page_title, page_icon)
     load_custom_css()
