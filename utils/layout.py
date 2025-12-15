@@ -179,12 +179,12 @@ def render_footer():
     """Render the app footer"""
     st.markdown("""
         <div class="custom-footer">
-            <p>LunarAge Classifier — Powered by LROCNet Moon Classifier Dataset</p>
+            <p>LunarAlge — Powered by LROCNet Moon Classifier Dataset</p>
             <p style="margin-top: 0.5rem;">Lunar Reconnaissance Orbiter Imagery Analysis</p>
         </div>
     """, unsafe_allow_html=True)
 
-def setup_page_config(page_title="LunarCrater Classifier", page_icon="🌙"):
+def setup_page_config(page_title="LunarAlge", page_icon="🌙"):
     """Setup common page configuration"""
     st.set_page_config(
         page_title=page_title,
