@@ -23,6 +23,8 @@ The prediction flow is structured as a scalable, serverless pipeline on Google C
 
 ```mermaid
 graph TD
-    A[Browser / Client] --> B[Streamlit Frontend (Cloud Run)];
+    A[Browser / Client] --> B[Streamlit Frontend];
     B --> C[FastAPI Backend (Cloud Run)];
-    C --> D[ML Model Inference];
+    C --> D[ML Model Inference (TensorFlow)];
+    D --> E[Prediction Result];
+    E --> B;
