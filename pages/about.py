@@ -1,12 +1,11 @@
 import streamlit as st
 import sys
 from pathlib import Path
+from utils.layout import init_layout, render_footer
+from utils.navigation import render_sidebar_navigation
 
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
-
-from utils.layout import init_layout, render_footer
-from utils.navigation import render_sidebar_navigation
 
 # Initialize layout
 init_layout(page_title="About", page_icon="ℹ️")

@@ -7,12 +7,11 @@ from PIL import Image
 import sys
 from pathlib import Path
 from urllib.parse import urljoin
+from utils.layout import init_layout, render_footer
+from utils.navigation import render_sidebar_navigation
 
 # Add parent directory to path to import utils
 sys.path.append(str(Path(__file__).parent.parent))
-
-from utils.layout import init_layout, render_footer
-from utils.navigation import render_sidebar_navigation
 
 # Initialize layout
 init_layout(page_title="Classify - LunarCrater", page_icon="🔬")
@@ -238,15 +237,13 @@ def classify_image(uploaded_file, image):
             #    "backend_url",
             #    st.secrets.get("BACKEND_URL", "http://localhost:8000")
             #)
-            backend_url = "https://lunar-crater-737799387839.europe-west1.run.app"
+            backend_url = st.secrets["BACKEND_URL"]
 
             # Ensure proper URL formatting
             api_url = urljoin(backend_url.rstrip('/') + '/', 'predict')
-            #api_url = f"{backend_url.rstrip('/')}/predict"
 
             # Add this for debugging (temporary)
             st.info(f"📡 Calling API: {api_url}")
-            st.info(f"Backend URL from session: {backend_url}")
 
             response = requests.post(
                 api_url,
