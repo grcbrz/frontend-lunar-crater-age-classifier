@@ -13,7 +13,7 @@ RUN pip install --upgrade pip
 
 COPY . .
 
-EXPOSE 8501
+EXPOSE 8000
 
 # Define the startup command
 CMD ["streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]

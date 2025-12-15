@@ -1,5 +1,6 @@
 import streamlit as st
 from pathlib import Path
+from utils.navigation import render_sidebar_navigation
 
 def load_custom_css():
     """Load custom CSS for the entire app"""
@@ -147,35 +148,6 @@ def render_header():
             </span>
         </div>
     """, unsafe_allow_html=True)
-
-def render_sidebar_navigation():
-    """Render sidebar navigation menu"""
-    with st.sidebar:
-        st.markdown("""
-            <div style="text-align: center; padding: 1rem 0 2rem 0;">
-                <div style="width: 4rem; height: 4rem; margin: 0 auto; border-radius: 50%;
-                            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
-                            display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 2rem;">🌙</span>
-                </div>
-                <h2 style="margin-top: 1rem; color: white; font-size: 1.5rem;">LunarChron</h2>
-            </div>
-        """, unsafe_allow_html=True)
-
-        st.markdown("---")
-        st.markdown("### 🧭 Navigation")
-
-        # Navigation buttons
-        if st.button("🏠 Home", use_container_width=True, key="nav_home"):
-            st.switch_page("main.py")
-
-        if st.button("🔬 Classify", use_container_width=True, key="nav_classify"):
-            st.switch_page("pages/classify.py")
-
-        if st.button("ℹ️ About", use_container_width=True, key="nav_about"):
-            st.switch_page("pages/about.py")
-
-        st.markdown("---")
 
 def render_footer():
     """Render the app footer"""
