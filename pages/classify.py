@@ -6,6 +6,7 @@ from io import BytesIO
 from PIL import Image
 import sys
 from pathlib import Path
+from urllib.parse import urljoin
 
 # Add parent directory to path to import utils
 sys.path.append(str(Path(__file__).parent.parent))
@@ -239,7 +240,8 @@ def classify_image(uploaded_file, image):
             )
 
             # Ensure proper URL formatting
-            api_url = f"{backend_url.rstrip('/')}/predict"
+            api_url = urljoin(backend_url.rstrip('/') + '/', 'predict')
+            #api_url = f"{backend_url.rstrip('/')}/predict"
 
             # Add this for debugging (temporary)
             st.info(f"📡 Calling API: {api_url}")
