@@ -236,7 +236,11 @@ def classify_image(uploaded_file, image):
             backend_url = st.session_state.get('backend_url', "http://localhost:8000")
 
             # Ensure proper URL formatting
-            api_url = f"{backend_url.rstrip('/')}/predict_crater_age_predict_post"
+            api_url = f"{backend_url.rstrip('/')}/predict"
+
+            # Add this for debugging (temporary)
+            st.info(f"📡 Calling API: {api_url}")
+            st.info(f"Backend URL from session: {backend_url}")
 
             response = requests.post(
                 api_url,
