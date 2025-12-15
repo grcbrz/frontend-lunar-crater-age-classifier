@@ -135,7 +135,6 @@ INFO_CARDS = [
     {'title': 'No Crater', 'age': 'Surface terrain', 'color': 'gray', 'hex': '#9ca3af'}
 ]
 
-
 def init_session_state():
     """Initialize session state variables"""
     defaults = {
@@ -146,7 +145,6 @@ def init_session_state():
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
-
 
 def render_header():
     """Render page header"""
@@ -194,7 +192,7 @@ def parse_backend_response(response_data):
 
     class_info = CLASS_MAPPING[class_index]
 
-    # Calculate estimated age based on class
+    # Calculate estimated age based on class (frontend logic)
     estimated_age = None
     if class_info['age_range']:
         if class_index == 0:  # Fresh crater (million years)
@@ -240,11 +238,11 @@ def classify_image(uploaded_file, image):
             # Call backend API
             files = {'file': (uploaded_file.name, img_byte_arr, 'image/png')}
 
-            # Get BACKEND_URL from session state with fallback
-            BACKEND_URL = st.session_state.get('backend_url', "http://localhost:8000")
+            # Get backend_url from session state with fallback
+            backend_url = st.session_state.get('backend_url', "http://localhost:8000")
 
             # Ensure proper URL formatting
-            api_url = f"{BACKEND_URL.rstrip('/')}/classify"
+            api_url = f"{backend_url.rstrip('/')}/classify"
 
             response = requests.post(
                 api_url,
@@ -260,48 +258,40 @@ def classify_image(uploaded_file, image):
             if response.status_code == 200:
                 backend_data = response.json()
                 result = parse_backend_response(backend_data)
+
+                # Complete progress
+                progress_bar.progress(100)
+                time.sleep(0.3)
+
+                st.session_state.classification_result = result
+                st.session_state.processing = False
                 st.success(f"✅ {backend_data.get('message', 'Classification complete!')}")
             else:
-                st.error(f"Backend error: {response.status_code} - {response.text}")
-                #response.raise_for_status()
-                #result = simulate_classification(image)  # Fallback
+                st.session_state.processing = False
+                st.error(f"❌ Backend error: {response.status_code} - {response.text}")
+                st.info("Please check your backend connection and try again.")
+                return
 
-        except requests.exceptions.ConnectionError:
-            st.warning("⚠️ Could not connect to backend. Using simulation mode.")
-            result = simulate_classification(image)
+        except requests.exceptions.ConnectionError as e:
+            st.session_state.processing = False
+            st.error(f"⚠️ Could not connect to backend at {api_url}")
+            st.info("Please ensure your backend server is running and try again.")
+            st.code(f"Connection Error: {str(e)}")
+            return
+
         except requests.exceptions.Timeout:
-            st.error("⏱️ Backend request timed out. Please try again.")
-            result = simulate_classification(image)
+            st.session_state.processing = False
+            st.error("⏱️ Backend request timed out (60 seconds)")
+            st.info("The server might be overloaded. Please try again in a moment.")
+            return
+
         except Exception as e:
+            st.session_state.processing = False
             st.error(f"❌ Unexpected error: {str(e)}")
-            result = simulate_classification(image)
-
-        # Complete progress
-        progress_bar.progress(100)
-        time.sleep(0.3)
-
-        st.session_state.classification_result = result
-        st.session_state.processing = False
+            st.info("Please try again or contact support if the issue persists.")
+            return
 
     st.rerun()
-
-
-def simulate_classification(image):
-    """Simulate classification for demo/fallback"""
-    import random
-
-    rand = random.random()
-    class_index = 0 if rand < 0.11 else (1 if rand < 0.29 else 2)
-
-    # Simulate backend response
-    simulated_response = {
-        'class_name': f"{CLASS_MAPPING[class_index]['display_name']} ({class_index})",
-        'class_index': class_index,
-        'confidence': random.uniform(0.65, 0.95),
-        'message': 'Simulated classification (backend unavailable)'
-    }
-
-    return parse_backend_response(simulated_response)
 
 def get_confidence_badge_class(confidence):
     """Get CSS class for confidence badge"""
@@ -403,6 +393,7 @@ def classify_page():
     else:
         render_result_section()
 
+    render_info_cards()
     render_footer()
 
 def main():
