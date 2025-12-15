@@ -10,9 +10,6 @@ sys.path.append(str(Path(__file__).parent.parent))
 # Initialize layout
 init_layout(page_title="About", page_icon="ℹ️")
 
-# Render navigation
-render_sidebar_navigation()
-
 # Constants
 DATASET_INFO = [
     {

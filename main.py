@@ -16,9 +16,6 @@ if 'backend_url' not in st.session_state:
 # Initialize layout
 init_layout(page_title="Home", page_icon="🌙")
 
-# Render navigation
-render_sidebar_navigation()
-
 def render_badge(text, icon="✨"):
     """Render a badge component"""
     st.markdown(f"""
