@@ -196,7 +196,7 @@ def setup_page_config(page_title="LunarChron Classifier", page_icon="🌙"):
         }
     )
 
-def init_layout(page_title="LunarChron Classifier", page_icon="🌙", show_sidebar=True):
+def init_layout(page_title="LunarChronX Classifier", page_icon="🌙", show_sidebar=True):
     """Initialize the complete layout for a page"""
     setup_page_config(page_title, page_icon)
     load_custom_css()
