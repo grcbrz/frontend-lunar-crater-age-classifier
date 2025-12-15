@@ -24,14 +24,17 @@ def render_sidebar_navigation():
 
         # Navigation buttons
         if st.button("🏠 Home", use_container_width=True,
+                     key="nav_home_btn",
                      type="primary" if current_page == "main" else "secondary"):
             st.switch_page("main.py")
 
         if st.button("🔬 Classify", use_container_width=True,
+                     key="nav_classify_btn",
                      type="primary" if current_page == "classify" else "secondary"):
             st.switch_page("pages/classify.py")
 
         if st.button("ℹ️ About", use_container_width=True,
+                     key="nav_about_btn",
                      type="primary" if current_page == "about" else "secondary"):
             st.switch_page("pages/about.py")
 
