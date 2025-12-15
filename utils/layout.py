@@ -161,18 +161,49 @@ def render_sidebar_navigation():
         st.markdown("---")
 
 def render_header():
-    """Render the app header with logo"""
-    st.markdown("""
-        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem 0 2rem 0;">
-            <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%;
-                        background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
-                        display: flex; align-items: center; justify-content: center;">
-                <span style="font-size: 1.25rem;">🌙</span>
+    """Render the app header with logo (clickable to return home)"""
+
+    # Container for the header
+    header_container = st.container()
+
+    with header_container:
+        # Create columns - one for header content, invisible one for spacing
+        col1, col2 = st.columns([1, 5])
+
+        with col1:
+            # Use a button styled as the logo
+            if st.button("🌙", key="logo_button", help="Return to Home"):
+                st.switch_page("main.py")
+
+        # Display title next to logo
+        st.markdown("""
+            <div style="margin-top: -50px; margin-left: 80px;">
+                <span style="font-weight: 700; font-size: 1.25rem; color: white;">
+                    LunarAge Classifier
+                </span>
             </div>
-            <span style="font-weight: 700; font-size: 1.25rem; color: white;">
-                LunarAlge
-            </span>
-        </div>
+        """, unsafe_allow_html=True)
+
+    # Style the button to look like the logo
+    st.markdown("""
+        <style>
+        button[data-testid="baseButton-secondary"][key="logo_button"] {
+            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%) !important;
+            border-radius: 50%;
+            width: 2.5rem !important;
+            height: 2.5rem !important;
+            border: none;
+            font-size: 1.25rem;
+            padding: 0;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        button[data-testid="baseButton-secondary"][key="logo_button"]:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+        }
+        </style>
     """, unsafe_allow_html=True)
 
 def render_footer():
