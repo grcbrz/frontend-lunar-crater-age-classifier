@@ -233,7 +233,10 @@ def classify_image(uploaded_file, image):
             files = {'file': (uploaded_file.name, img_byte_arr, 'image/png')}
 
             # Get backend_url from session state with fallback
-            backend_url = st.session_state.get('backend_url', "http://localhost:8000")
+            backend_url = st.session_state.get(
+                "backend_url",
+                st.secrets.get("BACKEND_URL", "http://localhost:8000")
+            )
 
             # Ensure proper URL formatting
             api_url = f"{backend_url.rstrip('/')}/predict"
