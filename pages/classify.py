@@ -23,7 +23,7 @@ render_sidebar_navigation()
 BACKEND_URL = st.session_state.get('backend_url', "http://localhost:8000")
 
 # Define the prediction endpoint
-PREDICT_ENDPOINT = f"{BACKEND_URL.rstrip('/')}/predict"
+PREDICT_ENDPOINT = f"{BACKEND_URL.rstrip('/')}/predict_crater_age"
 
 # CSS Styles
 STYLES = """
