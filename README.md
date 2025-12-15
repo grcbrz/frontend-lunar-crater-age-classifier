@@ -14,5 +14,18 @@
 
 ### Using this package with Docker
 
-# Setup instructions
+### Setup instructions
 Document here for users who want to setup the package locally
+
+### Architecture
+
+[ Browser ]
+     |
+     v
+[ Streamlit Frontend (Cloud Run) ]
+     |
+     v
+[ FastAPI Backend (Cloud Run) ]
+     |
+     v
+[ ML Model ]
