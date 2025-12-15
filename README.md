@@ -21,7 +21,6 @@ Document here for users who want to setup the package locally
 
 The prediction flow is structured as a scalable, serverless pipeline on Google Cloud Platform (GCP).
 
-```mermaid
 graph TD
     A[Browser / Client] --> B[Streamlit Frontend];
     B --> C[FastAPI Backend (Cloud Run)];
