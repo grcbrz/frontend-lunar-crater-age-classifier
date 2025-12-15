@@ -14,6 +14,11 @@ from utils.navigation import render_sidebar_navigation
 # Define the url to be used by requests.get to get a prediction (adapt if needed)
 #url = BASE_URI + 'predict'
 
+# Consider fallback like
+#BACKEND_URL = os.getenv(
+#    "BACKEND_URL",
+#    "http://localhost:8000"  # local fallback
+#)
 #=============================
 
 # Initialize session state
