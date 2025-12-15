@@ -19,12 +19,6 @@ init_layout(page_title="Classify - LunarCrater", page_icon="🔬")
 # Render navigation
 render_sidebar_navigation()
 
-# Backend Configuration
-BACKEND_URL = st.session_state.get('backend_url', "http://localhost:8000")
-
-# Define the prediction endpoint
-PREDICT_ENDPOINT = f"{BACKEND_URL.rstrip('/')}/predict_crater_age"
-
 # CSS Styles
 STYLES = """
 <style>
@@ -242,7 +236,7 @@ def classify_image(uploaded_file, image):
             backend_url = st.session_state.get('backend_url', "http://localhost:8000")
 
             # Ensure proper URL formatting
-            api_url = f"{backend_url.rstrip('/')}/predict"
+            api_url = f"{backend_url.rstrip('/')}/predict_crater_age"
 
             response = requests.post(
                 api_url,
