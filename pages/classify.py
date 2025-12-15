@@ -242,7 +242,7 @@ def classify_image(uploaded_file, image):
             backend_url = st.session_state.get('backend_url', "http://localhost:8000")
 
             # Ensure proper URL formatting
-            api_url = f"{backend_url.rstrip('/')}/classify"
+            api_url = f"{backend_url.rstrip('/')}/predict"
 
             response = requests.post(
                 api_url,
