@@ -20,7 +20,10 @@ init_layout(page_title="Classify - LunarCrater", page_icon="🔬")
 render_sidebar_navigation()
 
 # Backend Configuration
-BACKEND_URL = st.secrets["BACKEND_URL"]
+BACKEND_URL = st.session_state.get('backend_url', "http://localhost:8000")
+
+# Define the prediction endpoint
+PREDICT_ENDPOINT = f"{BACKEND_URL.rstrip('/')}/predict"
 
 # CSS Styles
 STYLES = """
@@ -236,10 +239,17 @@ def classify_image(uploaded_file, image):
 
             # Call backend API
             files = {'file': (uploaded_file.name, img_byte_arr, 'image/png')}
+
+            # Get BACKEND_URL from session state with fallback
+            BACKEND_URL = st.session_state.get('backend_url', "http://localhost:8000")
+
+            # Ensure proper URL formatting
+            api_url = f"{BACKEND_URL.rstrip('/')}/classify"
+
             response = requests.post(
-                f"{BACKEND_URL}/classify",
+                api_url,
                 files=files,
-                timeout=30
+                timeout=60
             )
 
             # Update progress - processing
@@ -253,7 +263,8 @@ def classify_image(uploaded_file, image):
                 st.success(f"✅ {backend_data.get('message', 'Classification complete!')}")
             else:
                 st.error(f"Backend error: {response.status_code} - {response.text}")
-                result = simulate_classification(image)  # Fallback
+                #response.raise_for_status()
+                #result = simulate_classification(image)  # Fallback
 
         except requests.exceptions.ConnectionError:
             st.warning("⚠️ Could not connect to backend. Using simulation mode.")
@@ -360,7 +371,6 @@ def render_result_section():
             use_container_width=True
         )
 
-
 def render_info_cards():
     """Render information cards about crater types"""
     if st.session_state.classification_result or st.session_state.processing:
@@ -382,7 +392,6 @@ def render_info_cards():
                 </div>
             """, unsafe_allow_html=True)
 
-
 def classify_page():
     """Main classify page"""
     st.markdown(STYLES, unsafe_allow_html=True)
@@ -395,7 +404,6 @@ def classify_page():
         render_result_section()
 
     render_footer()
-
 
 def main():
     """Main entry point"""
