@@ -177,14 +177,6 @@ def render_sidebar_navigation():
 
         st.markdown("---")
 
-        # Stats in sidebar
-        st.markdown("### 📊 Quick Stats")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric("Images", "5,000+", delta=None)
-        with col2:
-            st.metric("Classes", "3", delta=None)
-
 def render_footer():
     """Render the app footer"""
     st.markdown("""
