@@ -36,11 +36,3 @@ def render_sidebar_navigation():
             st.switch_page("pages/about.py")
 
         st.markdown("---")
-
-        # Stats in sidebar
-        st.markdown("### Who are we")
-        st.markdown("#### our names")
-        st.markdown("#### our names")
-        st.markdown("#### our names")
-        st.markdown("#### our names")
-        st.markdown("#### our names")
