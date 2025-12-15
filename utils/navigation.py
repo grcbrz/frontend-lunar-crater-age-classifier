@@ -10,7 +10,7 @@ def render_sidebar_navigation():
                             display: flex; align-items: center; justify-content: center;">
                     <span style="font-size: 2rem;">🌙</span>
                 </div>
-                <h2 style="margin-top: 1rem; color: white;">LunarChron</h2>
+                <h2 style="margin-top: 1rem; color: white;">LunarAlge</h2>
             </div>
         """, unsafe_allow_html=True)
 
