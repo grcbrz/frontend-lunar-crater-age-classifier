@@ -1,4 +1,4 @@
-# Lunar Crater Age Classifier
+# 🌙 Lunar Crater Age Classifier
 - Document project frontend here
 - Description
 - Data used
