@@ -121,10 +121,10 @@ docker_deploy:
 streamlit: streamlit_local
 
 streamlit_local:
-	-@API_URI=local_api_uri streamlit run app.py
+	-@API_URI=local_api_uri streamlit run main.py
 
 streamlit_local_docker:
-	-@API_URI=local_docker_uri streamlit run app.py
+	-@API_URI=local_docker_uri streamlit run main.py
 
 streamlit_cloud:
-	-@API_URI=cloud_api_uri streamlit run app.py
+	-@API_URI=cloud_api_uri streamlit run main.py
