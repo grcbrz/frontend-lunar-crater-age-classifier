@@ -179,7 +179,7 @@ def render_header():
         st.markdown("""
             <div style="margin-top: -50px; margin-left: 80px;">
                 <span style="font-weight: 700; font-size: 1.25rem; color: white;">
-                    LunarAge Classifier
+                    LunarAlge
                 </span>
             </div>
         """, unsafe_allow_html=True)
