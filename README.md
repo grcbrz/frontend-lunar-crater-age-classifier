@@ -3,7 +3,7 @@
 - **Description:** A machine learning model deployed via a scalable web API to classify lunar crater image chipouts into age categories (Fresh Crater, Old Crater, No Crater).
 - **Data used:** LROCNet Moon Classifier Dataset ([Zenodo/source](https://zenodo.org/records/7041842))
 - **Which API we're using:** FastAPI (for the ML service)
-- **Where front-end can be accessed:** ([Streamlit-Cloud] (https://lunaralge.streamlit.app/))
+- **Where front-end can be accessed:** ([Streamlit Cloud](https://lunaralge.streamlit.app/))
 
 ### What's here:
 
@@ -34,8 +34,8 @@ Document here for users who want to setup the package locally
 
 1.  **Clone the Repository:**
     ```bash
-    git clone YOUR_REPO_URL
-    cd lunar-crater-age-classifier
+    git clone https://github.com/grcbrz/frontend-lunar-crater-age-classifier
+    cd frontend-lunar-crater-age-classifier
     ```
 
 2.  **Create and Activate Environment:**
