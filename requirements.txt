@@ -17,3 +17,5 @@ streamlit
 requests
 python-dotenv
 watchdog
+
+matplotlib
