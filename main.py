@@ -79,11 +79,11 @@ def hero_section():
         btn_col1, btn_col2 = st.columns(2)
 
         with btn_col1:
-            if st.button("🚀 Start Classifying", use_container_width=True, type="primary"):
+            if st.button("Start Classifying", width='stretch', type="primary"):
                 st.switch_page("pages/classify.py")
 
         with btn_col2:
-            if st.button("📖 Learn More", use_container_width=True):
+            if st.button("Learn More", width='stretch'):
                 st.switch_page("pages/about.py")
 
     st.markdown("<br><br>", unsafe_allow_html=True)

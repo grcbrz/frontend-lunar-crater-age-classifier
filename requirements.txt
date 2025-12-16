@@ -9,6 +9,7 @@ six
 
 # img
 pillow
+base64io
 
 # web
 streamlit

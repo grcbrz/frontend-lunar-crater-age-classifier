@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 from urllib.parse import urljoin
 from utils.layout import init_layout, render_footer
-from utils.navigation import render_sidebar_navigation
+import base64
 
 # Add parent directory to path to import utils
 sys.path.append(str(Path(__file__).parent.parent))
@@ -168,18 +168,19 @@ def render_upload_section():
         # Preview
         _, col, _ = st.columns([1, 2, 1])
         with col:
-            st.image(image, caption="Preview", use_container_width=True)
+            st.image(image, caption="Preview", width='stretch')
 
         # Classify button
         _, col, _ = st.columns([1, 1, 1])
         with col:
-            if st.button("🔬 Classify Image", use_container_width=True, type="primary"):
+            if st.button("🔬 Classify Image", width='stretch', type="primary"):
                 classify_image(uploaded_file, image)
 
 def parse_backend_response(response_data):
     """Parse backend response and map to frontend format"""
     class_index = response_data['class_index']
     confidence = response_data['confidence'] * 100  # Convert to percentage
+    heatmap_base64 = response_data.get('heatmap_image')
 
     class_info = CLASS_MAPPING[class_index]
 
@@ -204,7 +205,8 @@ def parse_backend_response(response_data):
         'icon': class_info['icon'],
         'title': class_info['title'],
         'description': class_info['description'],
-        'raw_response': response_data
+        'raw_response': response_data,
+        'heatmap_base64': heatmap_base64
     }
 
 def classify_image(uploaded_file, image):
@@ -230,17 +232,14 @@ def classify_image(uploaded_file, image):
             files = {'file': (uploaded_file.name, img_byte_arr, 'image/png')}
 
             # Get backend_url from session state with fallback
-            #backend_url = st.session_state.get(
-            #    "backend_url",
-            #    st.secrets.get("BACKEND_URL", "http://localhost:8000")
-            #)
+            #backend_url = st.secrets.get("BACKEND_URL", "http://localhost:8000")
             backend_url = st.secrets["BACKEND_URL"]
 
             # Ensure proper URL formatting
             api_url = urljoin(backend_url.rstrip('/') + '/', 'predict')
 
-            # Add this for debugging (temporary)
-            st.info(f"📡 Calling API: {api_url}")
+            # Temporary debugging line
+            #st.info(f"📡 Calling API: {api_url}")
 
             response = requests.post(
                 api_url,
@@ -305,12 +304,30 @@ def render_result_section():
     result = st.session_state.classification_result
     image = st.session_state.image_preview
 
-    col1, col2 = st.columns([1, 1])
+    col1, col_heatmap, col3 = st.columns([1, 1, 1.2])
 
     with col1:
-        st.image(image, use_container_width=True, caption="Analyzed Image")
+        st.markdown("##### Input Image")
+        st.image(image, width='stretch', caption="Analyzed Image")
 
-    with col2:
+    with col_heatmap:
+        st.markdown("##### Activation Heatmap (Grad-CAM)")
+        heatmap_data = result.get('heatmap_base64')
+
+        if heatmap_data:
+            # Construct the Data URI for the image
+            heatmap_uri = f"data:image/png;base64,{heatmap_data}"
+
+            # Embed the image
+            st.image(
+                heatmap_uri,
+                caption="Red/Yellow indicates high-impact regions.",
+                width='stretch'
+            )
+        else:
+            st.warning("Heatmap visualization is unavailable for this prediction.")
+
+    with col3:
         st.markdown("### Classification Result")
         st.markdown(f"#### {result['display_name']}")
 
@@ -333,15 +350,16 @@ def render_result_section():
 
     # Action buttons
     st.markdown("<br>", unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
+    #col1, col2 = st.columns(2)
+    col_dl, col_reset = st.columns(2)
 
-    with col1:
-        if st.button("🔄 Classify Another Image", use_container_width=True):
+    with col_dl:
+        if st.button("🔄 Classify Another Image", width='stretch'):
             st.session_state.classification_result = None
             st.session_state.image_preview = None
             st.rerun()
 
-    with col2:
+    with col_reset:
         # Prepare download data (exclude icon/title/description for cleaner JSON)
         download_data = {
             'classification': result['classification'],
@@ -356,7 +374,7 @@ def render_result_section():
             data=json.dumps(download_data, indent=2),
             file_name="classification_result.json",
             mime="application/json",
-            use_container_width=True
+            width='stretch'
         )
 
 def render_info_cards():
