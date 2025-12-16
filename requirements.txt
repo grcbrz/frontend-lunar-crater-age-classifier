@@ -10,8 +10,10 @@ six
 # img
 pillow
 base64io
+opencv-python-headless>=4.8.0
 
 # web
 streamlit
 requests
 python-dotenv
+watchdog

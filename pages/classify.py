@@ -9,6 +9,10 @@ from pathlib import Path
 from urllib.parse import urljoin
 from utils.layout import init_layout, render_footer
 import base64
+import numpy as np
+import matplotlib.cm as cm
+import cv2
+import random
 
 # Add parent directory to path to import utils
 sys.path.append(str(Path(__file__).parent.parent))
@@ -176,6 +180,51 @@ def render_upload_section():
             if st.button("🔬 Classify Image", width='stretch', type="primary"):
                 classify_image(uploaded_file, image)
 
+def colorize_and_overlay_heatmap(
+    original_image: Image.Image,
+    heatmap_base64: str,
+    alpha: float = 0.45,
+    colormap=cv2.COLORMAP_TURBO #cv2.COLORMAP_JET
+) -> Image.Image:
+    """
+    Convert a grayscale Grad-CAM heatmap to color and overlay on original image.
+    """
+
+    # Decode base64 heatmap
+    heatmap_bytes = base64.b64decode(heatmap_base64)
+    heatmap_img = Image.open(BytesIO(heatmap_bytes)).convert("L")
+
+    # Resize heatmap to match input image
+    heatmap_img = heatmap_img.resize(original_image.size)
+
+    # Convert to numpy
+    heatmap_np = np.array(heatmap_img)
+
+    # Normalize [0, 255]
+    heatmap_np = cv2.normalize(
+        heatmap_np, None, 0, 255, cv2.NORM_MINMAX
+    ).astype(np.uint8)
+
+    # Invert so high activation = hot colors
+    heatmap_np = 255 - heatmap_np
+
+    # Apply colormap (JET = blue → red → yellow)
+    heatmap_color = cv2.applyColorMap(heatmap_np, colormap)
+
+    # Convert original image to OpenCV format
+    original_np = cv2.cvtColor(
+        np.array(original_image), cv2.COLOR_RGB2BGR
+    )
+
+    # Overlay heatmap on image
+    overlay = cv2.addWeighted(
+        original_np, 1 - alpha, heatmap_color, alpha, 0
+    )
+
+    # Convert back to PIL (RGB)
+    overlay_rgb = cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB)
+    return Image.fromarray(overlay_rgb)
+
 def parse_backend_response(response_data):
     """Parse backend response and map to frontend format"""
     class_index = response_data['class_index']
@@ -188,13 +237,9 @@ def parse_backend_response(response_data):
     estimated_age = None
     if class_info['age_range']:
         if class_index == 0:  # Fresh crater (million years)
-            import random
-            age = random.randint(*class_info['age_range'])
-            estimated_age = f"{age} million years"
+            estimated_age = f"{random.randint(*class_info['age_range'])} million years"
         elif class_index == 1:  # Old crater (billion years)
-            import random
-            age = random.uniform(*class_info['age_range'])
-            estimated_age = f"{age:.1f} billion years"
+            estimated_age = f"{random.uniform(*class_info['age_range']):.1f} billion years"
 
     return {
         'classification': class_info['classification'],
@@ -205,8 +250,8 @@ def parse_backend_response(response_data):
         'icon': class_info['icon'],
         'title': class_info['title'],
         'description': class_info['description'],
-        'raw_response': response_data,
-        'heatmap_base64': heatmap_base64
+        'heatmap_base64': heatmap_base64,
+        'raw_response': response_data
     }
 
 def classify_image(uploaded_file, image):
@@ -312,20 +357,28 @@ def render_result_section():
 
     with col_heatmap:
         st.markdown("##### Activation Heatmap (Grad-CAM)")
+
         heatmap_data = result.get('heatmap_base64')
 
         if heatmap_data:
-            # Construct the Data URI for the image
-            heatmap_uri = f"data:image/png;base64,{heatmap_data}"
+            # Decode base64
+            heatmap_bytes = base64.b64decode(heatmap_data)
+            heatmap_img = Image.open(BytesIO(heatmap_bytes)).convert("L")
 
-            # Embed the image
+            # Convert to numpy
+            heatmap_np = np.array(heatmap_img) / 255.0
+
+            # Apply colormap
+            colored = cm.jet(heatmap_np)[:, :, :3]  # drop alpha
+            colored_img = Image.fromarray((colored * 255).astype(np.uint8))
+
             st.image(
-                heatmap_uri,
-                caption="Red/Yellow indicates high-impact regions.",
+                colored_img,
+                caption="Red/Yellow indicates high-impact regions",
                 width='stretch'
             )
         else:
-            st.warning("Heatmap visualization is unavailable for this prediction.")
+            st.warning("Heatmap visualization is unavailable.")
 
     with col3:
         st.markdown("### Classification Result")
