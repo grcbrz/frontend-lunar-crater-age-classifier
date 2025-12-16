@@ -2,8 +2,8 @@
 
 - **Description:** A machine learning model deployed via a scalable web API to classify lunar crater image chipouts into age categories (Fresh Crater, Old Crater, No Crater).
 - **Data used:** LROCNet Moon Classifier Dataset ([Zenodo/source](https://zenodo.org/records/7041842))
-- **Which API you're using:** FastAPI (for the ML service)
-- **Where front-end can be accessed:** [Public Cloud Run URL for Streamlit]
+- **Which API we're using:** FastAPI (for the ML service)
+- **Where front-end can be accessed:** ([Streamlit-Cloud] (https://lunaralge.streamlit.app/))
 
 ### What's here:
 
