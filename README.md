@@ -29,7 +29,20 @@ graph TD
 ## 🛠️ Setup and Local Usage
 
 ### Project structure
-
+```
+├── pages
+│   ├── about.py
+│   └── classify.py
+├── utils
+│   ├── __init__.py
+│   ├── layout.py
+│   └── navigation.py
+├── Dockerfile
+├── main.py
+├── Makefile
+├── README.md
+└── requirements.txt
+```
 
 ### Setup instructions
 
