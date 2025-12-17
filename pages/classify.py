@@ -180,56 +180,14 @@ def render_upload_section():
             if st.button("🔬 Classify Image", width='stretch', type="primary"):
                 classify_image(uploaded_file, image)
 
-def colorize_and_overlay_heatmap(
-    original_image: Image.Image,
-    heatmap_base64: str,
-    alpha: float = 0.45,
-    colormap=cv2.COLORMAP_TURBO #cv2.COLORMAP_JET
-) -> Image.Image:
-    """
-    Convert a grayscale Grad-CAM heatmap to color and overlay on original image.
-    """
 
-    # Decode base64 heatmap
-    heatmap_bytes = base64.b64decode(heatmap_base64)
-    heatmap_img = Image.open(BytesIO(heatmap_bytes)).convert("L")
-
-    # Resize heatmap to match input image
-    heatmap_img = heatmap_img.resize(original_image.size)
-
-    # Convert to numpy
-    heatmap_np = np.array(heatmap_img)
-
-    # Normalize [0, 255]
-    heatmap_np = cv2.normalize(
-        heatmap_np, None, 0, 255, cv2.NORM_MINMAX
-    ).astype(np.uint8)
-
-    # Invert so high activation = hot colors
-    heatmap_np = 255 - heatmap_np
-
-    # Apply colormap (JET = blue → red → yellow)
-    heatmap_color = cv2.applyColorMap(heatmap_np, colormap)
-
-    # Convert original image to OpenCV format
-    original_np = cv2.cvtColor(
-        np.array(original_image), cv2.COLOR_RGB2BGR
-    )
-
-    # Overlay heatmap on image
-    overlay = cv2.addWeighted(
-        original_np, 1 - alpha, heatmap_color, alpha, 0
-    )
-
-    # Convert back to PIL (RGB)
-    overlay_rgb = cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB)
-    return Image.fromarray(overlay_rgb)
 
 def parse_backend_response(response_data):
     """Parse backend response and map to frontend format"""
     class_index = response_data['class_index']
     confidence = response_data['confidence'] * 100  # Convert to percentage
     heatmap_base64 = response_data.get('heatmap_image')
+    overlay_image = response_data.get('overlay_image')
 
     class_info = CLASS_MAPPING[class_index]
 
@@ -251,6 +209,7 @@ def parse_backend_response(response_data):
         'title': class_info['title'],
         'description': class_info['description'],
         'heatmap_base64': heatmap_base64,
+        'overlay_image': overlay_image,
         'raw_response': response_data
     }
 
@@ -358,22 +317,18 @@ def render_result_section():
     with col_heatmap:
         st.markdown("##### Activation Heatmap (Grad-CAM)")
 
-        heatmap_data = result.get('heatmap_base64')
+        heatmap_data = result.get('overlay_image')
 
         if heatmap_data:
             # Decode base64
             heatmap_bytes = base64.b64decode(heatmap_data)
-            heatmap_img = Image.open(BytesIO(heatmap_bytes)).convert("L")
+            heatmap_img = Image.open(BytesIO(heatmap_bytes)).convert("RGB")  #convert("L")
 
             # Convert to numpy
             heatmap_np = np.array(heatmap_img) / 255.0
 
-            # Apply colormap
-            colored = cm.jet(heatmap_np)[:, :, :3]  # drop alpha
-            colored_img = Image.fromarray((colored * 255).astype(np.uint8))
-
             st.image(
-                colored_img,
+                heatmap_np,
                 caption="Red/Yellow indicates high-impact regions",
                 width='stretch'
             )
