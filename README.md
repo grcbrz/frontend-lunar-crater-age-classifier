@@ -28,6 +28,22 @@ graph TD
 
 ## 🛠️ Setup and Local Usage
 
+### Project structure
+```
+├── pages
+│   ├── about.py
+│   └── classify.py
+├── utils
+│   ├── __init__.py
+│   ├── layout.py
+│   └── navigation.py
+├── Dockerfile
+├── main.py
+├── Makefile
+├── README.md
+└── requirements.txt
+```
+
 ### Setup instructions
 
 Document here for users who want to setup the package locally
@@ -40,16 +56,22 @@ Document here for users who want to setup the package locally
 
 2.  **Create and Activate Environment:**
     ```bash
-    python3 -m venv venv
-    source venv/bin/activate
+    pyenv virtualenv 3.10.6 frontend-lunar-crater-age-classifier
+    cd ~/code/<GITHUB_USER>/frontend-lunar-crater-age-classifier
+    pyenv local frontend-lunar-crater-age-classifier
     ```
 
-3.  **Install Dependencies:**
+3. **Create the .python-version file:**
+    ```bash
+    # This file tells pyenv/direnv which Python environment to use
+    echo "frontend-lunar-crater-age-classifier" > .python-version
+    ```
+4.  **Install Dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
-4.  **Configure Secrets:** Create the `.streamlit/secrets.toml` file with your Cloud Run backend URL:
+5.  **Configure Secrets:** Create the `.streamlit/secrets.toml` file with your Cloud Run backend URL:
     ```toml
     BACKEND_URL="[https://lunar-crater-737799387839.europe-west1.run.app](https://lunar-crater-737799387839.europe-west1.run.app)"
     ```
@@ -63,11 +85,7 @@ We use a `Makefile` to simplify common development tasks and ensure consistent e
 | Command | Description | Artifact/Service |
 | :--- | :--- | :--- |
 | `make install` | Installs all required Python dependencies. | Python Environment |
-| `make build_api` | Builds the FastAPI service Docker image. | Docker Image |
-| `make run_api_local` | Runs the FastAPI service locally on port 8000 (for testing). | FastAPI Container |
 | `make streamlit` | Runs the Streamlit frontend locally. | Streamlit App |
-| `make push_api` | Tags and pushes the Docker image to the Google Artifact Registry. | GCP Artifact Registry |
-| `make deploy_api` | Deploys the latest image from the registry to Cloud Run. | Cloud Run Service |
 
 **Example of use:**
 
