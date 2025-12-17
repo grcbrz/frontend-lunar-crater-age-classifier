@@ -10,8 +10,6 @@ from urllib.parse import urljoin
 from utils.layout import init_layout, render_footer
 import base64
 import numpy as np
-import matplotlib.cm as cm
-import cv2
 import random
 
 # Add parent directory to path to import utils
@@ -152,7 +150,6 @@ def render_header():
         </div>
     """, unsafe_allow_html=True)
 
-
 def render_upload_section():
     """Render image upload section"""
     st.markdown('<div class="upload-area">', unsafe_allow_html=True)
@@ -179,8 +176,6 @@ def render_upload_section():
         with col:
             if st.button("🔬 Classify Image", width='stretch', type="primary"):
                 classify_image(uploaded_file, image)
-
-
 
 def parse_backend_response(response_data):
     """Parse backend response and map to frontend format"""
@@ -302,7 +297,6 @@ def get_confidence_badge_class(confidence):
         return "confidence-medium"
     return "confidence-low"
 
-
 def render_result_section():
     """Render classification results"""
     result = st.session_state.classification_result
@@ -358,7 +352,6 @@ def render_result_section():
 
     # Action buttons
     st.markdown("<br>", unsafe_allow_html=True)
-    #col1, col2 = st.columns(2)
     col_dl, col_reset = st.columns(2)
 
     with col_dl:
