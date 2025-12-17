@@ -5,13 +5,15 @@ from utils.layout import init_layout, render_footer
 from utils.navigation import render_sidebar_navigation
 
 # Initialize session state with proper fallback logic
-if 'backend_url' not in st.session_state:
+#if 'backend_url' not in st.session_state:
     # First try to get from environment variable, then from secrets, then use fallback
-    BACKEND_URL = os.getenv(
-        "BACKEND_URL",
-        st.secrets.get('BACKEND_URL', "http://localhost:8000")  # local fallback
-    )
-    st.session_state.backend_url = BACKEND_URL
+    #BACKEND_URL = os.getenv(
+    #    "BACKEND_URL",
+    #    st.secrets.get('BACKEND_URL', "http://localhost:8000")  # local fallback
+    #)
+#    st.session_state.backend_url = "http://localhost:8000"   #BACKEND_URL
+
+BACKEND_URL = "http://localhost:8000"
 
 # Initialize layout
 init_layout(page_title="Home", page_icon="🌙")
